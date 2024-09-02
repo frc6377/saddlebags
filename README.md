@@ -24,9 +24,9 @@ sourceSets {
 
 ```
 
-### Cloning 
+### Cloning
 When cloning a project that contains a submodule, you must additionally run:
 
-`git submodule update --init` 
+`git submodule update --init`
 
 This will clone the submodule into the right location.
