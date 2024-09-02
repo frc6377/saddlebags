@@ -1,5 +1,5 @@
 # Saddlebags
-This repository is meant to be used a git submodule within a robot code project. It contains Java sources that can be carried forward (and iterated on) from previous years.
+This repository is meant to be used as a git submodule within a robot code project. It contains Java sources that can be carried forward (and iterated on) from previous years.
 
 ### Install instructions
 To add this repo as a submodule, run the following command from the robot project directory:
