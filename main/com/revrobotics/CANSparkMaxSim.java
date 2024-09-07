@@ -332,7 +332,7 @@ public class CANSparkMaxSim extends CANSparkMax {
     return REVLibError.kOk;
   }
 
-  // Algorithm pulled from https://docs.revrobotics.com/sparkmax/operating-modes/closed-loop-control
+  // Algorithm pulled from https://docs.revrobotics.com/brushless/spark-max/closed-loop-control
   private double calculate() {
     if (stopped) {
       return 0;
