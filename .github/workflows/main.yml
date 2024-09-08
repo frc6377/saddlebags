@@ -31,7 +31,7 @@ jobs:
         submodules: 'true'
 
     - name: Set submodule commit
-      run: pushd ./src/saddlebags && git checkout $GITHUB_SHA; popd
+      run: cd ./src/saddlebags && git checkout $GITHUB_SHA; cd ../..
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
