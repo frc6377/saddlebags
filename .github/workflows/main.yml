@@ -30,8 +30,9 @@ jobs:
         ref: saddlebags-test
         submodules: 'true'
 
-    - name: Set submodule commit
-      run: cd ./src/saddlebags && ls -al && git checkout $GITHUB_SHA; cd ../..
+    - uses: actions/checkout@v4
+      with: 
+        path: src/saddlebags
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
