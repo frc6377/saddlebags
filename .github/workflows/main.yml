@@ -1,10 +1,11 @@
-# This is a basic workflow to build robot code.
+# This is a basic workflow to build robot code and run a short simulation.
 
 name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the main branch.
 on:
+  # workflow_dispatch allows manual trigger from GitHub Actions page
   workflow_dispatch:
   push:
     branches: [ main ]
@@ -23,18 +24,18 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v4
+    # Checks-out parent repository under $GITHUB_WORKSPACE, so job can access it
+    - name: Checkout WPILib Project Repo
+      uses: actions/checkout@v4
       with: 
-        repository: frc6377/crescendo_2024
-        ref: saddlebags-test
-        submodules: 'true'
+        repository: frc6377/crescendo_2024 
+        ref: saddlebags-test 
+        #submodules: 'true'
 
-    - uses: actions/checkout@v4
+    - name: Checkout saddlebags commit under test
+      uses: actions/checkout@v4
       with: 
         path: src/saddlebags
-
-    - run: ls -al src/saddlebags
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
