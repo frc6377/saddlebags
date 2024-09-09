@@ -1,0 +1,54 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
+
+name: Publish package to GitHub Packages
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    container: wpilib/roborio-cross-ubuntu:2024-22.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      # Checks-out parent repository under $GITHUB_WORKSPACE, so job can access it
+      - name: Checkout WPILib Project Repo
+        uses: actions/checkout@v4
+        with: 
+          repository: frc6377/crescendo_2024 
+          ref: saddlebags-test 
+          #submodules: 'true'
+
+      - name: Checkout saddlebags commit under test
+        uses: actions/checkout@v4
+        with: 
+          path: src/saddlebags
+
+      # Grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Run spotless for code consistency
+      - name: Spotless Linting
+        run: ./gradlew spotlessCheck
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Publish package
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
