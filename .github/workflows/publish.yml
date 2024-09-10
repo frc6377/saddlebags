@@ -49,9 +49,6 @@ jobs:
       - name: Prepend maven-publish plugin
         run: echo "plugins { id 'maven-publish'}" > build.gradle.tmp; cat build.gradle >> build.gradle.tmp; mv build.gradle.tmp build.gradle
       
-      - name: Debug build.gradle
-        run: cat build.gradle
-
       # Run spotless apply to fix any formatting on build.gradle
       - name: Spotless Apply
         run: ./gradlew spotlessApply
