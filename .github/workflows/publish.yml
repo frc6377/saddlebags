@@ -7,7 +7,7 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Publish package to GitHub Packages
+name: Publish Saddlebags to GitHub Packages
 on:
   workflow_dispatch:
   release:
@@ -40,6 +40,14 @@ jobs:
       # Run spotless for code consistency
       - name: Spotless Linting
         run: ./gradlew spotlessCheck
+
+      # Append publishing config to build.gradle
+      - name: Setup Gradle Publish
+        run: cat src/saddlebags/.github/publish-append >> ./build.gradle
+
+      # Run spotless apply to fix any formatting on build.gradle
+      - name: Spotless Apply
+        run: ./gradlew spotlessApply
 
       - uses: actions/setup-java@v4
         with:
