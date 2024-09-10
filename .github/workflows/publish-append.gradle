@@ -1,0 +1,35 @@
+sourceSets {
+    publish {
+        java {
+            srcDirs("src/saddlebags/main")
+            srcDirs("src/saddlebags/test")
+        }
+    }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.publish.allJava
+    archiveClassifier = "sources"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'frc6377.saddlebags'
+            artifactId = 'saddlebags-java'
+            version = '1.0.1'
+            from components.java
+            artifact sourceJar
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/frc6377/saddlebags")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
