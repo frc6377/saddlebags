@@ -47,8 +47,7 @@ jobs:
         run: cat src/saddlebags/.github/workflows/publish-append.gradle >> ./build.gradle
 
       - name: Prepend maven-publish plugin
-        run: cat build.gradle | (echo "plugins { id 'maven-publish'}" && cat) > build.gradle
-
+        run: echo "plugins { id 'maven-publish'}" > build.gradle.tmp; cat build.gradle >> build.gradle.tmp; mv build.gradle.tmp build.gradle
       
       - name: Debug build.gradle
         run: cat build.gradle
