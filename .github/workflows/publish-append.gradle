@@ -4,7 +4,6 @@ sourceSets {
             srcDirs("src/saddlebags/main")
             srcDirs("src/saddlebags/test")
         }
-
     }
 }
 
