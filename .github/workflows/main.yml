@@ -28,8 +28,8 @@ jobs:
     - name: Checkout WPILib Project Repo
       uses: actions/checkout@v4
       with: 
-        repository: frc6377/crescendo_2024 
-        ref: saddlebags-test 
+        repository: frc6377/reefscape_2025
+        ref: main 
         #submodules: 'true'
 
     - name: Checkout saddlebags commit under test
