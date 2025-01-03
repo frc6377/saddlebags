@@ -1,8 +1,7 @@
 // LimelightHelpers v1.2.1 (March 1, 2023)
 
-package frc.robot.utilities;
+package utilities;
 
-import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,10 +18,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.LimelightConstants;
 import frc.robot.Robot;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -436,6 +431,7 @@ public class LimelightHelpers {
     }
     return null;
   }
+
   /////
   /////
   private static double horizAngle;
@@ -453,27 +449,6 @@ public class LimelightHelpers {
       return vertAngle;
     }
     return getLimelightNTDouble(limelightName, "ty");
-  }
-
-  public static void simPose(SwerveDriveState state) {
-    double newX =
-        state.Pose.getX()
-            - (DriverStation.getAlliance().isPresent()
-                    && DriverStation.getAlliance().get().equals(Alliance.Red)
-                ? LimelightConstants.FIELD_LENGTH
-                : 0);
-    double newY =
-        state.Pose.getY() - (LimelightConstants.TAG_Y_POS + LimelightConstants.FIELD_HALF_WIDTH);
-    double horizontalAngle = Units.radiansToDegrees(Math.atan(newY / newX));
-    double verticalAngle =
-        Units.radiansToDegrees(
-            Math.atan(
-                LimelightConstants.TAG_HEIGHT / Math.sqrt(Math.pow(newX, 2) + Math.pow(newY, 2))));
-    horizAngle = horizontalAngle - state.Pose.getRotation().getDegrees();
-    vertAngle = verticalAngle;
-    SmartDashboard.putNumber("LL Horizontal Angle", horizAngle);
-    SmartDashboard.putNumber("LL Vertical Angle", vertAngle);
-    SmartDashboard.putNumber("LL X Distance", newX);
   }
 
   public static double getTA(String limelightName) {
@@ -562,14 +537,6 @@ public class LimelightHelpers {
   }
 
   public static double getFiducialID(String limelightName) {
-    if (Robot.isSimulation()) {
-      if (DriverStation.getAlliance().isPresent()) {
-        if (DriverStation.getAlliance().get().equals(Alliance.Blue)) {
-          return LimelightConstants.SPEAKER_TAG_ID_BLUE;
-        }
-      }
-      return LimelightConstants.SPEAKER_TAG_ID_RED;
-    }
     return getLimelightNTDouble(limelightName, "tid");
   }
 

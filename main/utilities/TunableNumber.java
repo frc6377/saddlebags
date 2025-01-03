@@ -1,4 +1,4 @@
-package frc.robot.utilities;
+package utilities;
 
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.DoubleTopic;

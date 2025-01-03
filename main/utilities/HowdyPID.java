@@ -2,10 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.utilities;
+package utilities;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxSim;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -47,23 +45,24 @@ public class HowdyPID {
     this.FF = ff;
   }
 
-  public void createTunableNumbers(String name, CANSparkMax motor, Subsystem subsystem) {
-    this.tuneP =
-        new TunableNumber(
-            name.concat(" P"), this.P, p -> motor.getPIDController().setP(p), subsystem);
-    this.tuneI =
-        new TunableNumber(
-            name.concat(" I"), this.I, i -> motor.getPIDController().setI(i), subsystem);
-    this.tuneD =
-        new TunableNumber(
-            name.concat(" D"), this.D, d -> motor.getPIDController().setD(d), subsystem);
-    this.tuneIz =
-        new TunableNumber(
-            name.concat(" Iz"), this.Iz, iz -> motor.getPIDController().setIZone(iz), subsystem);
-    this.tuneFF =
-        new TunableNumber(
-            name.concat(" FF"), this.FF, ff -> motor.getPIDController().setFF(ff), subsystem);
-  }
+  // FIXME New SparkMax API
+  // public void createTunableNumbers(String name, CANSparkMax motor, Subsystem subsystem) {
+  //   this.tuneP =
+  //       new TunableNumber(
+  //           name.concat(" P"), this.P, p -> motor.getPIDController().setP(p), subsystem);
+  //   this.tuneI =
+  //       new TunableNumber(
+  //           name.concat(" I"), this.I, i -> motor.getPIDController().setI(i), subsystem);
+  //   this.tuneD =
+  //       new TunableNumber(
+  //           name.concat(" D"), this.D, d -> motor.getPIDController().setD(d), subsystem);
+  //   this.tuneIz =
+  //       new TunableNumber(
+  //           name.concat(" Iz"), this.Iz, iz -> motor.getPIDController().setIZone(iz), subsystem);
+  //   this.tuneFF =
+  //       new TunableNumber(
+  //           name.concat(" FF"), this.FF, ff -> motor.getPIDController().setFF(ff), subsystem);
+  // }
 
   public void createTunableNumbers(String name, PIDController controller, Subsystem subsystem) {
     this.tuneP = new TunableNumber(name.concat(" P"), this.P, p -> controller.setP(p), subsystem);
@@ -73,21 +72,22 @@ public class HowdyPID {
         new TunableNumber(name.concat(" Iz"), this.Iz, iz -> controller.setIZone(iz), subsystem);
   }
 
-  public void setSparkPidController(CANSparkMax motor) {
-    motor.getPIDController().setP(this.P);
-    motor.getPIDController().setI(this.I);
-    motor.getPIDController().setD(this.D);
-    motor.getPIDController().setIZone(this.Iz);
-    motor.getPIDController().setFF(this.FF);
-  }
+  // FIXME New SparkMax API
+  // public void setSparkPidController(CANSparkMax motor) {
+  //   motor.getPIDController().setP(this.P);
+  //   motor.getPIDController().setI(this.I);
+  //   motor.getPIDController().setD(this.D);
+  //   motor.getPIDController().setIZone(this.Iz);
+  //   motor.getPIDController().setFF(this.FF);
+  // }
 
-  public void setSparkPidController(CANSparkMaxSim motor) {
-    motor.getPIDController().setP(this.P);
-    motor.getPIDController().setI(this.I);
-    motor.getPIDController().setD(this.D);
-    motor.getPIDController().setIZone(this.Iz);
-    motor.getPIDController().setFF(this.FF);
-  }
+  // public void setSparkPidController(CANSparkMaxSim motor) {
+  //   motor.getPIDController().setP(this.P);
+  //   motor.getPIDController().setI(this.I);
+  //   motor.getPIDController().setD(this.D);
+  //   motor.getPIDController().setIZone(this.Iz);
+  //   motor.getPIDController().setFF(this.FF);
+  // }
 
   public PIDController getPIDController() {
     final PIDController controller = new PIDController(this.P, this.I, this.D);
