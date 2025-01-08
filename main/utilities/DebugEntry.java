@@ -85,14 +85,6 @@ public class DebugEntry<T> {
     localConsumer.accept(defaultValue);
   }
 
-  public DebugEntry<T> withPosition(int colIndex, int rowIndex) {
-    return this;
-  }
-
-  public DebugEntry<T> withSize(int width, int height) {
-    return this;
-  }
-
   public void log(T newValue) {
     try {
       if (!Robot.isCompetition && lastValue != newValue) {

@@ -4,7 +4,13 @@
 
 package utilities;
 
+import static edu.wpi.first.units.Units.Millimeters;
+
 import com.playingwithfusion.TimeOfFlight;
+import edu.wpi.first.hal.SimBoolean;
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDevice.Direction;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -14,31 +20,39 @@ import frc.robot.Robot;
 public class TOFSensorSimple {
   private static ShuffleboardTab sensorTab = Shuffleboard.getTab("sensors");
   private TimeOfFlight sensor;
-  private double threshold;
+  private Distance threshold;
   private int id;
+  private SimDevice sim;
+  private SimBoolean simBeam;
 
-  public TOFSensorSimple(int ID, double threshold) {
+  public TOFSensorSimple(int ID, Distance threshold) {
     this.id = ID;
     sensor = new TimeOfFlight(this.id);
     if (!Robot.isCompetition) {
-      sensorTab.addDouble("tof sensor " + this.id + " distance (mm)", this::getMilliMeters);
+      sensorTab.addString(
+          "tof sensor " + this.id + " measurement", () -> getDistance().toShortString());
       sensorTab.addBoolean("tof sensor " + this.id + " broken", this::isBeamBroke);
     }
-    this.threshold = threshold; // in mm
+    this.threshold = threshold;
+    if (Robot.isSimulation()) {
+      sim = SimDevice.create("TOF", id);
+      simBeam = sim.createBoolean("BeamBroken", Direction.kBidir, false);
+    }
   }
 
   public int getID() {
     return this.id;
   }
 
-  public double getMilliMeters() {
-    if (!Robot.isCompetition) {}
-
-    return this.sensor.getRange();
+  public Distance getDistance() {
+    return Millimeters.of(this.sensor.getRange());
   }
 
   public boolean isBeamBroke() {
-    return getMilliMeters() < this.threshold;
+    if (Robot.isSimulation()) {
+      return simBeam.get();
+    }
+    return getDistance().lt(this.threshold);
   }
 
   public Trigger beamBroken() {
