@@ -92,7 +92,8 @@ public class OI_Utils {
       this((int) povAngle, action, "POV " + povAngle, controller, ControlType.POVBUTTON);
     }
 
-    public Control(XboxController.Axis axis, String action, XboxController controller, double threshold) {
+    public Control(
+        XboxController.Axis axis, String action, XboxController controller, double threshold) {
       this(axis.value, action, axis.name(), controller, ControlType.TRIGGER);
       this.threshold = threshold;
     }
