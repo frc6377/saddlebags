@@ -1,7 +1,6 @@
-package frc.robot;
+package utilities;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -12,115 +11,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class OI {
+public class OI_Utils {
   // Operator Interface (OI) class containing all control information
-
-  private static final int driverJoystickPort = 0;
-  private static final int operatorJoystickPort = 1;
-
-  public static final class Driver {
-    public static final XboxController controller = new XboxController(driverJoystickPort);
-
-    // A B Y X Buttons
-    public static final Control A = new Control(XboxController.Button.kA, null, controller);
-    public static final Control B = new Control(XboxController.Button.kB, null, controller);
-    public static final Control Y = new Control(XboxController.Button.kY, null, controller);
-    public static final Control X = new Control(XboxController.Button.kX, null, controller);
-
-    // Bumpers & Triggers
-    public static final Control lockSpeaker =
-        new Control(XboxController.Axis.kLeftTrigger, "point at speaker", controller, 0.5);
-    public static final Control lockAmp =
-        new Control(XboxController.Axis.kRightTrigger, "point at amp", controller, 0.5);
-    public static final Control lockSource =
-        new Control(XboxController.Button.kLeftBumper, "Intake Speaker from Source", controller);
-    public static final Control highGear =
-        new Control(XboxController.Button.kRightBumper, "High gear", controller);
-
-    // Start, End & Left/Right stick buttons
-    public static final Control resetRotationButton =
-        new Control(XboxController.Button.kStart, "Zero", controller);
-    public static final Control back = new Control(XboxController.Button.kBack, null, controller);
-    public static final Control LSB =
-        new Control(XboxController.Button.kLeftStick, null, controller);
-    public static final Control RSB =
-        new Control(XboxController.Button.kRightStick, null, controller);
-
-    // Control Curves
-    private static final ControlCurve xTranslationCurve = new ControlCurve(1, 0, 0, 0.0, true);
-    private static final ControlCurve yTranslationCurve = new ControlCurve(1, 0, 0, 0.0);
-    public static final ControlCurve translationMagnitudeCurve = new ControlCurve(1, 0, 1, 0.1);
-    public static final ControlCurve rotationCurve = new ControlCurve(0.8, 0, 1, 0, true);
-
-    // Joystick Axes
-    public static final Control xTranslationAxis =
-        new Control(XboxController.Axis.kLeftX, "X Translation", controller, xTranslationCurve);
-    public static final Control yTranslationAxis =
-        new Control(XboxController.Axis.kLeftY, "Y Translation", controller, yTranslationCurve);
-    public static final Control rotationAxis =
-        new Control(XboxController.Axis.kRightX, "Rotation", controller, rotationCurve);
-    public static final Control RightY =
-        new Control(XboxController.Axis.kRightY, null, controller, null);
-
-    public static void setRumble(double rumbleIntensity) {
-      controller.setRumble(RumbleType.kBothRumble, rumbleIntensity);
-    }
-  }
-
-  public static final class Operator {
-    public static final XboxController controller = new XboxController(operatorJoystickPort);
-
-    // A B Y X Buttons
-    public static final Control retractClimber =
-        new Control(XboxController.Button.kA, "Retract Climber", controller);
-    public static final Control latchClimber =
-        new Control(XboxController.Button.kB, "Latch Climber", controller);
-    public static final Control simple =
-        new Control(XboxController.Button.kX, "Test Behavior", controller);
-    public static final Control prepClimb =
-        new Control(XboxController.Button.kY, "Prepare Climb", controller);
-
-    // Bumpers & Triggers
-    public static final Control fire =
-        new Control(XboxController.Axis.kLeftTrigger, "Fire", controller, 0.5);
-    public static final Control prepareToFire =
-        new Control(XboxController.Axis.kRightTrigger, "Rev/Prep to score", controller, 0.5);
-    public static final Control switchToSpeaker =
-        new Control(XboxController.Button.kLeftBumper, "Speaker Mode", controller);
-    public static final Control switchToAmp =
-        new Control(XboxController.Button.kRightBumper, "Amp Mode", controller);
-
-    // Start, End & Left/Right stick buttons
-    public static final Control disableOdomTracking =
-        new Control(XboxController.Button.kStart, "Disable odom tracking", controller);
-    public static final Control leftStick =
-        new Control(XboxController.Button.kLeftStick, null, controller);
-    public static final Control rightStick =
-        new Control(XboxController.Button.kRightStick, null, controller);
-    public static final Control back = new Control(XboxController.Button.kBack, null, controller);
-
-    // Control Curves
-    private static final ControlCurve xTranslationCurve = new ControlCurve(1, 0, 0, 0.0);
-    private static final ControlCurve yTranslationCurve = new ControlCurve(1, 0, 0, 0.0);
-    public static final ControlCurve translationMagnitudeCurve = new ControlCurve(1, 0, 1, 0.0);
-    public static final ControlCurve rotationCurve = new ControlCurve(0.8, 0, 1, 0.0, true);
-
-    // Joystick Axes
-    public static final Control xTranslationAxis =
-        new Control(XboxController.Axis.kLeftX, "X Translation", controller, xTranslationCurve);
-    public static final Control yTranslationAxis =
-        new Control(XboxController.Axis.kLeftY, "Y Translation", controller, yTranslationCurve);
-    public static final Control rotationAxis =
-        new Control(XboxController.Axis.kRightX, "Rotation", controller, rotationCurve);
-    public static final Control RightY =
-        new Control(XboxController.Axis.kRightY, null, controller, null);
-
-    public static void setRumble(double rumbleIntensity) {
-      controller.setRumble(RumbleType.kBothRumble, rumbleIntensity);
-    }
-  }
-
-  // --- OI UTILITIES -- //
+  public static final int driverJoystickPort = 0;
+  public static final int operatorJoystickPort = 1;
 
   public static Supplier<Double> getAxisSupplier(Control axis) {
     if (axis.getType() != Control.ControlType.AXIS) {
@@ -154,7 +48,7 @@ public class OI {
         () -> trigger.getController().getRawAxis(trigger.getId()) > trigger.getThreshold());
   }
 
-  private static class Control {
+  public static class Control {
     private enum ControlType {
       AXIS,
       BUTTON,
@@ -170,7 +64,7 @@ public class OI {
     private double threshold; // Percentage where axis is triggered as a button
     private ControlType type;
 
-    private Control(
+    public Control(
         int id, String action, String name, XboxController controller, ControlType type) {
       this.id = id;
       this.action = action;
@@ -180,25 +74,25 @@ public class OI {
       putControl();
     }
 
-    Control(
+    public Control(
         XboxController.Axis axis, String action, XboxController controller, ControlCurve curve) {
       this(axis.value, action, axis.name(), controller, ControlType.AXIS);
       this.curve = curve;
     }
 
-    Control(XboxController.Axis axis, String action, XboxController controller) {
+    public Control(XboxController.Axis axis, String action, XboxController controller) {
       this(axis, action, controller, new ControlCurve(1, 0, 0, 0));
     }
 
-    Control(XboxController.Button button, String action, XboxController controller) {
+    public Control(XboxController.Button button, String action, XboxController controller) {
       this(button.value, action, button.name(), controller, ControlType.BUTTON);
     }
 
-    Control(double povAngle, String action, XboxController controller) {
+    public Control(double povAngle, String action, XboxController controller) {
       this((int) povAngle, action, "POV " + povAngle, controller, ControlType.POVBUTTON);
     }
 
-    Control(XboxController.Axis axis, String action, XboxController controller, double threshold) {
+    public Control(XboxController.Axis axis, String action, XboxController controller, double threshold) {
       this(axis.value, action, axis.name(), controller, ControlType.TRIGGER);
       this.threshold = threshold;
     }
