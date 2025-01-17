@@ -49,7 +49,7 @@ public class OI_Utils {
   }
 
   public static class Control {
-    private enum ControlType {
+    public enum ControlType {
       AXIS,
       BUTTON,
       POVBUTTON,

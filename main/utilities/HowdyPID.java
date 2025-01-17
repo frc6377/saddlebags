@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** Add your docs here. */
+@SuppressWarnings("unused")
 public class HowdyPID {
   private double P;
   private double I;
