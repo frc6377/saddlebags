@@ -71,7 +71,8 @@ public class OI_Utils {
       this.name = name;
       this.controller = controller;
       this.type = type;
-      putControl();
+      // FIXME causing crash with switching control curves
+      // putControl();
     }
 
     public Control(
