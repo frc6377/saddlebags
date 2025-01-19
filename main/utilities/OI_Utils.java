@@ -2,13 +2,9 @@ package utilities;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import java.util.Map;
 import java.util.function.Supplier;
 
 public class OI_Utils {
@@ -58,7 +54,6 @@ public class OI_Utils {
 
     private int id;
     private String action;
-    private String name; // Refers to button name
     private XboxController controller;
     private ControlCurve curve;
     private double threshold; // Percentage where axis is triggered as a button
@@ -68,10 +63,8 @@ public class OI_Utils {
         int id, String action, String name, XboxController controller, ControlType type) {
       this.id = id;
       this.action = action;
-      this.name = name;
       this.controller = controller;
       this.type = type;
-      putControl();
     }
 
     public Control(
@@ -106,10 +99,6 @@ public class OI_Utils {
       return action;
     }
 
-    private String getName() {
-      return name;
-    }
-
     private XboxController getController() {
       return controller;
     }
@@ -124,22 +113,6 @@ public class OI_Utils {
 
     private ControlType getType() {
       return type;
-    }
-
-    private void putControl() {
-      if (getAction() == null) return;
-
-      if (controller.getPort() == driverJoystickPort) {
-        driverControlsLayout.add(
-            "Driver " + getType().toString() + " " + String.valueOf(getId()),
-            type.toString() + " " + getName() + ": " + getAction());
-      }
-
-      if (controller.getPort() == operatorJoystickPort) {
-        operatorControlsLayout.add(
-            "Operator " + getType().toString() + " " + String.valueOf(getId()),
-            type.toString() + " " + getName() + ": " + getAction());
-      }
     }
   }
 
@@ -191,18 +164,4 @@ public class OI_Utils {
               + (1 - yIntercept) * (curvature * Math.pow(input, 3) + (1 - curvature) * input));
     }
   }
-
-  private static ShuffleboardLayout driverControlsLayout =
-      Shuffleboard.getTab("Controls")
-          .getLayout("Driver Controls", BuiltInLayouts.kList)
-          .withSize(3, 5)
-          .withPosition(0, 0)
-          .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for Variables;
-
-  private static ShuffleboardLayout operatorControlsLayout =
-      Shuffleboard.getTab("Controls")
-          .getLayout("Operator Controls", BuiltInLayouts.kList)
-          .withSize(3, 5)
-          .withPosition(3, 0)
-          .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for Variables;
 }
