@@ -6,14 +6,8 @@ package utilities;
 
 import static edu.wpi.first.units.Units.Millimeters;
 
-import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.AutoLogOutput;
-
 import au.grapplerobotics.LaserCan;
 import com.playingwithfusion.TimeOfFlight;
-import edu.wpi.first.hal.SimBoolean;
-import edu.wpi.first.hal.SimDevice;
-import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -54,7 +48,9 @@ public class TOFSensorSimple {
 
   public void setSimDistance(Distance newDist) {
     if (Robot.isReal()) {
-      DriverStation.reportWarning("You are trying to set the distance of a real TOF. Please only do this in Simulation.", null);
+      DriverStation.reportWarning(
+          "You are trying to set the distance of a real TOF. Please only do this in Simulation.",
+          null);
     }
     simDistance = newDist;
   }
@@ -81,7 +77,8 @@ public class TOFSensorSimple {
   }
 
   public void blink() {
-    if (Robot.isSimulation()) DriverStation.reportWarning("You are blinking the TOF with ID of " + id, null);
+    if (Robot.isSimulation())
+      DriverStation.reportWarning("You are blinking the TOF with ID of " + id, null);
     if (TOF_Type == TOFType.PW_FUSION) {
       TOFSensor.identifySensor();
     } else {
