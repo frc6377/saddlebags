@@ -6,6 +6,9 @@ package utilities;
 
 import static edu.wpi.first.units.Units.Millimeters;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import au.grapplerobotics.LaserCan;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.hal.SimBoolean;
@@ -25,8 +28,9 @@ public class TOFSensorSimple {
   private LaserCan LazerCan;
   private Distance threshold;
   private int id;
-  private SimDevice sim;
-  private SimBoolean simBeam;
+
+  // For Sim
+  private Distance simDistance;
 
   public static enum TOFType {
     PW_FUSION,
@@ -36,7 +40,7 @@ public class TOFSensorSimple {
   private TOFType TOF_Type;
 
   public TOFSensorSimple(int ID, Distance threshold, TOFType TOF_Type) {
-    this.id = ID;
+    id = ID;
     this.TOF_Type = TOF_Type;
 
     if (TOF_Type == TOFType.LASER_CAN) {
@@ -45,35 +49,31 @@ public class TOFSensorSimple {
       TOFSensor = new TimeOfFlight(this.id);
     }
 
-    if (!Robot.isCompetition) {
-      sensorTab.addString(
-          "tof sensor " + this.id + " measurement", () -> getDistance().toShortString());
-      sensorTab.addBoolean("tof sensor " + this.id + " broken", this::isBeamBroke);
-    }
     this.threshold = threshold;
-    if (Robot.isSimulation()) {
-      sim = SimDevice.create("TOF", id);
-      simBeam = sim.createBoolean("BeamBroken", Direction.kBidir, false);
+  }
+
+  public void setSimDistance(Distance newDist) {
+    if (Robot.isReal()) {
+      DriverStation.reportWarning("You are trying to set the distance of a real TOF. Please only do this in Simulation.", null);
     }
+    simDistance = newDist;
   }
 
   public int getID() {
-    return this.id;
+    return id;
   }
 
   public Distance getDistance() {
+    if (Robot.isSimulation()) return simDistance;
     if (TOF_Type == TOFType.LASER_CAN) {
       return Millimeters.of(LazerCan.getMeasurement().distance_mm);
     } else {
-      return Millimeters.of(this.TOFSensor.getRange());
+      return Millimeters.of(TOFSensor.getRange());
     }
   }
 
   public boolean isBeamBroke() {
-    if (Robot.isSimulation()) {
-      return simBeam.get();
-    }
-    return getDistance().lt(this.threshold);
+    return getDistance().lt(threshold);
   }
 
   public Trigger beamBroken() {
@@ -81,6 +81,7 @@ public class TOFSensorSimple {
   }
 
   public void blink() {
+    if (Robot.isSimulation()) DriverStation.reportWarning("You are blinking the TOF with ID of " + id, null);
     if (TOF_Type == TOFType.PW_FUSION) {
       TOFSensor.identifySensor();
     } else {
