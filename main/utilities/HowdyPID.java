@@ -6,7 +6,6 @@ package utilities;
 
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
-
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.Consumer;
 
