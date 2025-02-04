@@ -4,115 +4,102 @@
 
 package utilities;
 
+import java.util.function.Consumer;
+
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
+import com.ctre.phoenix6.configs.Slot2Configs;
+import com.ctre.phoenix6.configs.SlotConfigs;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** Add your docs here. */
 @SuppressWarnings("unused")
 public class HowdyPID {
-  private double P;
-  private double I;
-  private double D;
-  private double Iz; // I Zone
-  private double FF;
+  private double kP;
+  private double kI;
+  private double kD;
+  private double kS;
+  private double kV;
+  private double kA;
+  private double kG;
+
+  private Consumer<Double> consumerP;
+  private Consumer<Double> consumerI;
+  private Consumer<Double> consumerD;
+  private Consumer<Double> consumerS;
+  private Consumer<Double> consumerV;
+  private Consumer<Double> consumerA;
+  private Consumer<Double> consumerG;
 
   private TunableNumber tuneP;
   private TunableNumber tuneI;
   private TunableNumber tuneD;
-  private TunableNumber tuneIz;
-  private TunableNumber tuneFF;
+  private TunableNumber tuneS;
+  private TunableNumber tuneV;
+  private TunableNumber tuneA;
+  private TunableNumber tuneG;
 
-  public HowdyPID(double p, double i, double d) {
-    this.P = p;
-    this.I = i;
-    this.D = d;
-    this.Iz = 0.0;
-    this.FF = 0.0;
+  private SlotConfigs slotConfigs;
+
+  public HowdyPID(int slotID) {
+    slotConfigs = new SlotConfigs();
+    slotConfigs.SlotNumber = slotID;
   }
 
-  public HowdyPID(double p, double i, double d, double iz) {
-    this.P = p;
-    this.I = i;
-    this.D = d;
-    this.Iz = iz;
-    this.FF = 0.0;
+  public void setKP(double kP) {
+    this.kP = kP;
+    slotConfigs.withKP(kP);
+  }
+  public void setKI(double kI) {
+    this.kI = kP;
+    slotConfigs.withKI(kI);
+  }
+  public void setKD(double kD) {
+    this.kD = kD;
+    slotConfigs.withKD(kD);
+  }
+  public void setKS(double kS) {
+    this.kS = kS;
+    slotConfigs.withKS(kS);
+  }
+  public void setKV(double kV) {
+    this.kV = kV;
+    slotConfigs.withKV(kV);
+  }
+  public void setKA(double kA) {
+    this.kA = kA;
+    slotConfigs.withKA(kA);
+  }
+  public void setKG(double kG) {
+    this.kG = kG;
+    slotConfigs.withKG(kG);
   }
 
-  public HowdyPID(double p, double i, double d, double iz, double ff) {
-    this.P = p;
-    this.I = i;
-    this.D = d;
-    this.Iz = iz;
-    this.FF = ff;
+  // get what slot you want to use
+  public SlotConfigs geSlotConfigs(int slotIndex) {
+    SlotConfigs slotConfigs = new SlotConfigs().withKP(kP).withKI(kI).withKD(kD).withKS(kS).withKV(kV).withKA(kA).withKG(kG);
+    slotConfigs.SlotNumber = slotIndex;
+    return slotConfigs;
   }
 
-  // FIXME New SparkMax API
-  // public void createTunableNumbers(String name, CANSparkMax motor, Subsystem subsystem) {
-  //   this.tuneP =
-  //       new TunableNumber(
-  //           name.concat(" P"), this.P, p -> motor.getPIDController().setP(p), subsystem);
-  //   this.tuneI =
-  //       new TunableNumber(
-  //           name.concat(" I"), this.I, i -> motor.getPIDController().setI(i), subsystem);
-  //   this.tuneD =
-  //       new TunableNumber(
-  //           name.concat(" D"), this.D, d -> motor.getPIDController().setD(d), subsystem);
-  //   this.tuneIz =
-  //       new TunableNumber(
-  //           name.concat(" Iz"), this.Iz, iz -> motor.getPIDController().setIZone(iz), subsystem);
-  //   this.tuneFF =
-  //       new TunableNumber(
-  //           name.concat(" FF"), this.FF, ff -> motor.getPIDController().setFF(ff), subsystem);
-  // }
+  public void createTunableNumbers(String name, Subsystem subsystem) {
+    consumerP = (value) -> slotConfigs.withKP(value);
+    consumerI = (value) -> slotConfigs.withKI(value);
+    consumerD = (value) -> slotConfigs.withKD(value);
+    consumerS = (value) -> slotConfigs.withKS(value);
+    consumerV = (value) -> slotConfigs.withKV(value);
+    consumerA = (value) -> slotConfigs.withKA(value);
+    consumerG = (value) -> slotConfigs.withKG(value);
 
-  public void createTunableNumbers(String name, PIDController controller, Subsystem subsystem) {
-    this.tuneP = new TunableNumber(name.concat(" P"), this.P, p -> controller.setP(p), subsystem);
-    this.tuneI = new TunableNumber(name.concat(" I"), this.I, i -> controller.setI(i), subsystem);
-    this.tuneD = new TunableNumber(name.concat(" D"), this.D, d -> controller.setD(d), subsystem);
-    this.tuneIz =
-        new TunableNumber(name.concat(" Iz"), this.Iz, iz -> controller.setIZone(iz), subsystem);
-  }
-
-  // FIXME New SparkMax API
-  // public void setSparkPidController(CANSparkMax motor) {
-  //   motor.getPIDController().setP(this.P);
-  //   motor.getPIDController().setI(this.I);
-  //   motor.getPIDController().setD(this.D);
-  //   motor.getPIDController().setIZone(this.Iz);
-  //   motor.getPIDController().setFF(this.FF);
-  // }
-
-  // public void setSparkPidController(CANSparkMaxSim motor) {
-  //   motor.getPIDController().setP(this.P);
-  //   motor.getPIDController().setI(this.I);
-  //   motor.getPIDController().setD(this.D);
-  //   motor.getPIDController().setIZone(this.Iz);
-  //   motor.getPIDController().setFF(this.FF);
-  // }
-
-  public PIDController getPIDController() {
-    final PIDController controller = new PIDController(this.P, this.I, this.D);
-    controller.setIZone(this.Iz);
-    return controller;
-  }
-
-  public double getP() {
-    return this.P;
-  }
-
-  public double getI() {
-    return this.I;
-  }
-
-  public double getD() {
-    return this.D;
-  }
-
-  public double getIz() {
-    return this.Iz;
-  }
-
-  public double getFF() {
-    return this.FF;
+    tuneP = new TunableNumber(name.concat(" kP"), kP, consumerP, subsystem);
+    tuneI = new TunableNumber(name.concat(" kI"), kI, consumerI, subsystem);
+    tuneD = new TunableNumber(name.concat(" kD"), kD, consumerD, subsystem);
+    tuneS = new TunableNumber(name.concat(" kS"), kS, consumerS, subsystem);
+    tuneV = new TunableNumber(name.concat(" kV"), kV, consumerV, subsystem);
+    tuneA = new TunableNumber(name.concat(" kA"), kA, consumerA, subsystem);
+    tuneG = new TunableNumber(name.concat(" kG"), kG, consumerG, subsystem);
   }
 }
