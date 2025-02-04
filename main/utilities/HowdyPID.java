@@ -4,16 +4,11 @@
 
 package utilities;
 
-import java.util.function.Consumer;
-
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.Slot1Configs;
-import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import java.util.function.Consumer;
 
 /** Add your docs here. */
 @SuppressWarnings("unused")
@@ -25,6 +20,8 @@ public class HowdyPID {
   private double kV;
   private double kA;
   private double kG;
+
+  private int slotIndex; // should be 0, 1, or 2
 
   private Consumer<Double> consumerP;
   private Consumer<Double> consumerI;
@@ -42,64 +39,78 @@ public class HowdyPID {
   private TunableNumber tuneA;
   private TunableNumber tuneG;
 
-  private SlotConfigs slotConfigs;
+  private static final SlotConfigs slotConfigs = new SlotConfigs();
 
-  public HowdyPID(int slotID) {
-    slotConfigs = new SlotConfigs();
+  public HowdyPID(
+      int slotID, double kP, double kI, double kD, double kS, double kV, double kA, double kG) {
     slotConfigs.SlotNumber = slotID;
+    setKP(kP);
+    setKI(kI);
+    setKD(kD);
+    setKS(kS);
+    setKV(kV);
+    setKA(kA);
+    setKG(kG);
   }
 
   public void setKP(double kP) {
     this.kP = kP;
     slotConfigs.withKP(kP);
   }
+
   public void setKI(double kI) {
     this.kI = kP;
     slotConfigs.withKI(kI);
   }
+
   public void setKD(double kD) {
     this.kD = kD;
     slotConfigs.withKD(kD);
   }
+
   public void setKS(double kS) {
     this.kS = kS;
     slotConfigs.withKS(kS);
   }
+
   public void setKV(double kV) {
     this.kV = kV;
     slotConfigs.withKV(kV);
   }
+
   public void setKA(double kA) {
     this.kA = kA;
     slotConfigs.withKA(kA);
   }
+
   public void setKG(double kG) {
     this.kG = kG;
     slotConfigs.withKG(kG);
   }
 
-  // get what slot you want to use
-  public SlotConfigs geSlotConfigs(int slotIndex) {
-    SlotConfigs slotConfigs = new SlotConfigs().withKP(kP).withKI(kI).withKD(kD).withKS(kS).withKV(kV).withKA(kA).withKG(kG);
-    slotConfigs.SlotNumber = slotIndex;
+  public void setStaticFeedforwardSign(StaticFeedforwardSignValue staticFeedforwardSignValue) {
+    slotConfigs.withStaticFeedforwardSign(staticFeedforwardSignValue);
+  }
+
+  public SlotConfigs geSlotConfigs() {
     return slotConfigs;
   }
 
   public void createTunableNumbers(String name, Subsystem subsystem) {
-    consumerP = (value) -> slotConfigs.withKP(value);
-    consumerI = (value) -> slotConfigs.withKI(value);
-    consumerD = (value) -> slotConfigs.withKD(value);
-    consumerS = (value) -> slotConfigs.withKS(value);
-    consumerV = (value) -> slotConfigs.withKV(value);
-    consumerA = (value) -> slotConfigs.withKA(value);
-    consumerG = (value) -> slotConfigs.withKG(value);
+    consumerP = (value) -> setKP(value);
+    consumerI = (value) -> setKI(value);
+    consumerD = (value) -> setKD(value);
+    consumerS = (value) -> setKS(value);
+    consumerV = (value) -> setKV(value);
+    consumerA = (value) -> setKA(value);
+    consumerG = (value) -> setKG(value);
 
-    tuneP = new TunableNumber(name.concat(" kP"), kP, consumerP, subsystem);
-    tuneI = new TunableNumber(name.concat(" kI"), kI, consumerI, subsystem);
-    tuneD = new TunableNumber(name.concat(" kD"), kD, consumerD, subsystem);
-    tuneS = new TunableNumber(name.concat(" kS"), kS, consumerS, subsystem);
-    tuneV = new TunableNumber(name.concat(" kV"), kV, consumerV, subsystem);
-    tuneA = new TunableNumber(name.concat(" kA"), kA, consumerA, subsystem);
-    tuneG = new TunableNumber(name.concat(" kG"), kG, consumerG, subsystem);
+    tuneP = new TunableNumber(name + ": kP (Slot: " + slotIndex + ")", kP, consumerP, subsystem);
+    tuneI = new TunableNumber(name + ": kI (Slot: " + slotIndex + ")", kI, consumerI, subsystem);
+    tuneD = new TunableNumber(name + ": kD (Slot: " + slotIndex + ")", kD, consumerD, subsystem);
+    tuneS = new TunableNumber(name + ": kS (Slot: " + slotIndex + ")", kS, consumerS, subsystem);
+    tuneV = new TunableNumber(name + ": kV (Slot: " + slotIndex + ")", kV, consumerV, subsystem);
+    tuneA = new TunableNumber(name + ": kA (Slot: " + slotIndex + ")", kA, consumerA, subsystem);
+    tuneG = new TunableNumber(name + ": kG (Slot: " + slotIndex + ")", kG, consumerG, subsystem);
   }
 }
