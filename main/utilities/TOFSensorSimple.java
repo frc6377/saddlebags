@@ -10,14 +10,11 @@ import au.grapplerobotics.LaserCan;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Robot;
 
 /** Add your docs here. */
 public class TOFSensorSimple {
-  private static ShuffleboardTab sensorTab = Shuffleboard.getTab("sensors");
   private TimeOfFlight TOFSensor;
   private LaserCan LazerCan;
   private Distance threshold;
