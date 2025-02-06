@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # This grabs the WPILib docker container
-    container: wpilib/roborio-cross-ubuntu:2024-22.04
+    container: wpilib/roborio-cross-ubuntu:2025-24.04
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -28,14 +28,18 @@ jobs:
     - name: Checkout WPILib Project Repo
       uses: actions/checkout@v4
       with: 
-        repository: frc6377/crescendo_2024 
-        ref: saddlebags-test 
+        repository: frc6377/reefscape_2025
+        ref: main 
         #submodules: 'true'
 
     - name: Checkout saddlebags commit under test
       uses: actions/checkout@v4
       with: 
         path: src/saddlebags
+
+    # Declares the repository safe and not under dubious ownership.
+    - name: Add repository to git safe directories
+      run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
     # Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
