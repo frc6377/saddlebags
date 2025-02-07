@@ -21,6 +21,7 @@ public class TunableNumber extends SubsystemBase implements DoubleSupplier {
   private Consumer<Double> consumer;
   private DoubleTopic doubleTopic;
   private DoubleSubscriber doubleSub;
+  private long latestValue;
 
   public TunableNumber(String name, double defaultValue, Subsystem subsystem) {
     this(name, defaultValue, (ignored) -> {}, subsystem);
@@ -51,8 +52,11 @@ public class TunableNumber extends SubsystemBase implements DoubleSupplier {
   }
 
   public void periodic() {
-    value = doubleSub.get(this.defaultValue);
-    consumer.accept(value);
+    if (latestValue != doubleSub.getLastChange()) {
+      value = doubleSub.get(this.defaultValue);
+      consumer.accept(value);
+      latestValue = doubleSub.getLastChange();
+    }
   }
 
   public double getAsDouble() {
