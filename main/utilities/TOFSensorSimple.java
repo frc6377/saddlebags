@@ -4,6 +4,7 @@
 
 package utilities;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Millimeters;
 
 import au.grapplerobotics.LaserCan;
@@ -21,7 +22,7 @@ public class TOFSensorSimple {
   private int id;
 
   // For Sim
-  private Distance simDistance;
+  private Distance simDistance = Inches.zero();
 
   public static enum TOFType {
     PW_FUSION,
