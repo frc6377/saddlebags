@@ -4,7 +4,8 @@
 
 package utilities;
 
-import com.ctre.phoenix6.configs.SlotConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.Consumer;
@@ -19,6 +20,7 @@ public class HowdyPID {
   private double kV;
   private double kA;
   private double kG;
+  private GravityTypeValue gravityTypeValue;
 
   private int slotIndex; // should be 0, 1, or 2
 
@@ -38,11 +40,10 @@ public class HowdyPID {
   private TunableNumber tuneA;
   private TunableNumber tuneG;
 
-  private static final SlotConfigs slotConfigs = new SlotConfigs();
+  private static final Slot0Configs slotConfigs = new Slot0Configs();
 
   public HowdyPID(
       int slotID, double kP, double kI, double kD, double kS, double kV, double kA, double kG) {
-    slotConfigs.SlotNumber = slotID;
     setKP(kP);
     setKI(kI);
     setKD(kD);
@@ -50,6 +51,26 @@ public class HowdyPID {
     setKV(kV);
     setKA(kA);
     setKG(kG);
+  }
+
+  public HowdyPID(
+      int slotID,
+      double kP,
+      double kI,
+      double kD,
+      double kS,
+      double kV,
+      double kA,
+      double kG,
+      GravityTypeValue gravityTypeValue) {
+    setKP(kP);
+    setKI(kI);
+    setKD(kD);
+    setKS(kS);
+    setKV(kV);
+    setKA(kA);
+    setKG(kG);
+    setGravityType(gravityTypeValue);
   }
 
   public void setKP(double kP) {
@@ -87,11 +108,16 @@ public class HowdyPID {
     slotConfigs.withKG(kG);
   }
 
+  public void setGravityType(GravityTypeValue gravityTypeValue) {
+    this.gravityTypeValue = gravityTypeValue;
+    slotConfigs.GravityType = gravityTypeValue;
+  }
+
   public void setStaticFeedforwardSign(StaticFeedforwardSignValue staticFeedforwardSignValue) {
     slotConfigs.withStaticFeedforwardSign(staticFeedforwardSignValue);
   }
 
-  public SlotConfigs geSlotConfigs() {
+  public Slot0Configs getSlotConfigs() {
     return slotConfigs;
   }
 
