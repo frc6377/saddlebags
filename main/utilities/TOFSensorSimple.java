@@ -21,15 +21,15 @@ public class TOFSensorSimple {
   private Distance threshold;
   private int id;
 
-  // For Sim
-  private Distance simDistance = Inches.zero();
-
   public static enum TOFType {
     PW_FUSION,
     LASER_CAN
   }
 
   private TOFType TOF_Type;
+
+  // For Sim
+  private Distance simDistance = Inches.zero();
 
   public TOFSensorSimple(int ID, Distance threshold, TOFType TOF_Type) {
     id = ID;
@@ -66,12 +66,12 @@ public class TOFSensorSimple {
     }
   }
 
-  public boolean isBeamBroke() {
+  public boolean getBeamBroke() {
     return getDistance().lt(threshold);
   }
 
-  public Trigger beamBroken() {
-    return new Trigger(this::isBeamBroke);
+  public Trigger getBeamBrokenTrigger() {
+    return new Trigger(this::getBeamBroke);
   }
 
   public void blink() {
