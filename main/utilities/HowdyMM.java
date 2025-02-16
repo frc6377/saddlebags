@@ -14,20 +14,20 @@ public class HowdyMM {
 
   public HowdyMM() {}
 
-  public HowdyMM(AngularAcceleration acceleration, AngularVelocity velocity) {
+  public HowdyMM(AngularVelocity velocity, AngularAcceleration acceleration) {
     setAcceleration(acceleration);
     setCruiseVelocity(velocity);
   }
 
-  public HowdyMM(AngularAcceleration acceleration, AngularVelocity velocity, double jerk) {
+  public HowdyMM(AngularVelocity velocity, AngularAcceleration acceleration, double jerk) {
     setAcceleration(acceleration);
     setCruiseVelocity(velocity);
     setJerk(jerk);
   }
 
   public HowdyMM(
+    AngularVelocity velocity,
       AngularAcceleration acceleration,
-      AngularVelocity velocity,
       double jerk,
       double kV,
       double kA) {
@@ -38,12 +38,12 @@ public class HowdyMM {
     setExpoKA(kA);
   }
 
-  public void setAcceleration(AngularAcceleration acceleration) {
-    motionMagicConfigs.withMotionMagicAcceleration(acceleration);
-  }
-
   public void setCruiseVelocity(AngularVelocity velocity) {
     motionMagicConfigs.withMotionMagicCruiseVelocity(velocity);
+  }
+
+  public void setAcceleration(AngularAcceleration acceleration) {
+    motionMagicConfigs.withMotionMagicAcceleration(acceleration);
   }
 
   public void setJerk(double jerk) {
