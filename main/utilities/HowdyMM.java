@@ -5,8 +5,10 @@
 package utilities;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import edu.wpi.first.units.AngularAccelerationUnit;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Velocity;
 
 /** Add your docs here. */
 public class HowdyMM {
@@ -26,7 +28,16 @@ public class HowdyMM {
   }
 
   public HowdyMM(
-    AngularVelocity velocity,
+      AngularVelocity velocity,
+      AngularAcceleration acceleration,
+      Velocity<AngularAccelerationUnit> jerk) {
+    setAcceleration(acceleration);
+    setCruiseVelocity(velocity);
+    setJerk(jerk);
+  }
+
+  public HowdyMM(
+      AngularVelocity velocity,
       AngularAcceleration acceleration,
       double jerk,
       double kV,
@@ -47,6 +58,10 @@ public class HowdyMM {
   }
 
   public void setJerk(double jerk) {
+    motionMagicConfigs.withMotionMagicJerk(jerk);
+  }
+
+  public void setJerk(Velocity<AngularAccelerationUnit> jerk) {
     motionMagicConfigs.withMotionMagicJerk(jerk);
   }
 
