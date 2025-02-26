@@ -34,7 +34,15 @@ public class HowdyPID {
 
   private static final SlotConfigs slotConfigs = new SlotConfigs();
 
-  public HowdyPID() {}
+  public HowdyPID() {
+    setKP(0);
+    setKI(0);
+    setKD(0);
+    setKS(0);
+    setKV(0);
+    setKA(0);
+    setKG(0);
+  }
 
   public HowdyPID(double kP, double kI, double kD, double kS, double kV, double kA, double kG) {
     setKP(kP);
