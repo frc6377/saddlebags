@@ -4,6 +4,7 @@
 
 package utilities;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Millimeters;
 
 import au.grapplerobotics.LaserCan;
@@ -20,15 +21,15 @@ public class TOFSensorSimple {
   private Distance threshold;
   private int id;
 
-  // For Sim
-  private Distance simDistance;
-
   public static enum TOFType {
     PW_FUSION,
     LASER_CAN
   }
 
   private TOFType TOF_Type;
+
+  // For Sim
+  private Distance simDistance = Inches.zero();
 
   public TOFSensorSimple(int ID, Distance threshold, TOFType TOF_Type) {
     id = ID;
@@ -59,18 +60,22 @@ public class TOFSensorSimple {
   public Distance getDistance() {
     if (Robot.isSimulation()) return simDistance;
     if (TOF_Type == TOFType.LASER_CAN) {
+      if (LazerCan.getMeasurement() == null) {
+        System.out.println("Lazer Can " + id + " Has no measurement!!!!");
+        return Millimeters.of(0);
+      }
       return Millimeters.of(LazerCan.getMeasurement().distance_mm);
     } else {
       return Millimeters.of(TOFSensor.getRange());
     }
   }
 
-  public boolean isBeamBroke() {
+  public boolean getBeamBroke() {
     return getDistance().lt(threshold);
   }
 
-  public Trigger beamBroken() {
-    return new Trigger(this::isBeamBroke);
+  public Trigger getBeamBrokenTrigger() {
+    return new Trigger(this::getBeamBroke);
   }
 
   public void blink() {
