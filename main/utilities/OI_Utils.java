@@ -20,28 +20,19 @@ public class OI_Utils {
     return () -> axis.getCurve().calculate(axis.getController().getRawAxis(axis.getId()));
   }
 
-  public static JoystickButton getButton(Control button) {
-    if (button.getType() != Control.ControlType.BUTTON) {
-      DriverStation.reportError(button.getAction() + " is not a button", true);
+  public static Trigger getButton(Control button) {
+    switch (button.getType()) {
+      case BUTTON:
+        return new JoystickButton(button.getController(), button.getId());
+      case POVBUTTON:
+        return new POVButton(button.getController(), button.getId());
+      case TRIGGER:
+        return new Trigger(
+            () -> button.getController().getRawAxis(button.getId()) > button.getThreshold());
+      default:
+        DriverStation.reportError(button.getAction() + " is not a valid input", true);
+        return new Trigger(() -> false);
     }
-    return new JoystickButton(button.getController(), button.getId());
-  }
-
-  public static POVButton getPOVButton(Control povButton) {
-    if (povButton.getType() != Control.ControlType.POVBUTTON) {
-      DriverStation.reportError(povButton.getAction() + " is not a POV button", true);
-    }
-    return new POVButton(povButton.getController(), povButton.getId());
-  }
-
-  public static Trigger getTrigger(Control trigger) {
-    // "Trigger" referring to the type of button, not the WPI class
-    if (trigger.getType() != Control.ControlType.TRIGGER) {
-      DriverStation.reportError(trigger.getAction() + " is not a trigger", true);
-      return new Trigger(() -> false);
-    }
-    return new Trigger(
-        () -> trigger.getController().getRawAxis(trigger.getId()) > trigger.getThreshold());
   }
 
   public static class Control {
