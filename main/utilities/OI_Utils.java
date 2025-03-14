@@ -30,7 +30,7 @@ public class OI_Utils {
         return new Trigger(
             () -> button.getController().getRawAxis(button.getId()) > button.getThreshold());
       default:
-      throw  new RuntimeException(button.getAction() + " is not a valid input");
+        throw new RuntimeException(button.getAction() + " is not a valid input");
     }
   }
 
