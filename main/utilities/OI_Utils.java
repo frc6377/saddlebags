@@ -30,8 +30,7 @@ public class OI_Utils {
         return new Trigger(
             () -> button.getController().getRawAxis(button.getId()) > button.getThreshold());
       default:
-        DriverStation.reportError(button.getAction() + " is not a valid input", true);
-        return new Trigger(() -> false);
+      throw  new RuntimeException(button.getAction() + " is not a valid input");
     }
   }
 
