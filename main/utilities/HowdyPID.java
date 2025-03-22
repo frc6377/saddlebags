@@ -32,7 +32,7 @@ public class HowdyPID {
   private TunableNumber tuneA;
   private TunableNumber tuneG;
 
-  private static final SlotConfigs slotConfigs = new SlotConfigs();
+  private final SlotConfigs slotConfigs = new SlotConfigs();
 
   public HowdyPID() {
     setKP(0);
