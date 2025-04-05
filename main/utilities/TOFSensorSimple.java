@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Millimeters;
 
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -60,11 +61,12 @@ public class TOFSensorSimple {
   public Distance getDistance() {
     if (Robot.isSimulation()) return simDistance;
     if (TOF_Type == TOFType.LASER_CAN) {
-      if (LazerCan.getMeasurement() == null) {
+      Measurement TOFMeasurement = LazerCan.getMeasurement();
+      if (TOFMeasurement == null) {
         System.out.println("Lazer Can " + id + " Has no measurement!!!!");
         return Millimeters.of(0);
       }
-      return Millimeters.of(LazerCan.getMeasurement().distance_mm);
+      return Millimeters.of(TOFMeasurement.distance_mm);
     } else {
       return Millimeters.of(TOFSensor.getRange());
     }
