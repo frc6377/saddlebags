@@ -131,11 +131,13 @@ public class OI_Utils {
     }
 
     public double calculate(double input) {
-      /* https://www.desmos.com/calculator/w6ovblmmqj
+      /* https://www.desmos.com/calculator/f8ozt8kubd
       First is the deadzone
       y = 0 {|x| < d}
       The second is the curve
-      y = a(sign(x) * b + (1 - b) * (c * x^3 + (1 - c) * x)) {|x| >= d}
+      y = a(sign(x) * b + (1 - b) * (c * x^3 + (1 - c) * (1 / 1 - d) * (x - d))) {x >= d}
+      or
+      y = a(sign(x) * b + (1 - b) * (c * x^3 + (1 - c) * (1 / 1 - d) * (x + d))) {x <= -d}
       Where
       x = input
       y = output
@@ -151,7 +153,7 @@ public class OI_Utils {
       return (inverted ? -1 : 1)
           * ySaturation
           * (Math.signum(input) * yIntercept
-              + (1 - yIntercept) * (curvature * Math.pow(input, 3) + (1 - curvature) * input));
+              + (1 - yIntercept) * (curvature * Math.pow(input, 3) + (1 - curvature) * (1 / (1 - deadzone)) * (input - (deadzone*(input > 0 ? 1 : -1)))));
     }
   }
 }
