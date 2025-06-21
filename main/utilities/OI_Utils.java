@@ -124,7 +124,7 @@ public class OI_Utils {
     }
 
     public double calculate(double input) {
-      /* https://www.desmos.com/calculator/f8ozt8kubd
+      /* https://www.desmos.com/calculator/y7nxbdicbj
       First is the deadzone
       y = 0 {|x| < d}
       The second is the curve
