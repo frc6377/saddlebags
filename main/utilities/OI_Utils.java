@@ -108,26 +108,19 @@ public class OI_Utils {
 
   public static class ControlCurve {
     private final double ySaturation; // Maximum output, in percentage of possible output
-    private final double yIntercept; // Minimum output, in percentage of saturation
     private final double curvature; // Curvature shift between linear and cubic
     private final double deadzone; // Range of input that will always return zero output
     private final boolean inverted;
 
-    public ControlCurve(
-        double ySaturation,
-        double yIntercept,
-        double curvature,
-        double deadzone,
-        boolean inverted) {
+    public ControlCurve(double ySaturation, double curvature, double deadzone, boolean inverted) {
       this.ySaturation = ySaturation;
-      this.yIntercept = yIntercept;
       this.curvature = curvature;
       this.deadzone = deadzone;
       this.inverted = inverted;
     }
 
     public ControlCurve(double ySaturation, double yIntercept, double curvature, double deadzone) {
-      this(ySaturation, yIntercept, curvature, deadzone, false);
+      this(ySaturation, curvature, deadzone, false);
     }
 
     public double calculate(double input) {
@@ -135,25 +128,32 @@ public class OI_Utils {
       First is the deadzone
       y = 0 {|x| < d}
       The second is the curve
-      y = a(sign(x) * b + (1 - b) * (c * x^3 + (1 - c) * (1 / 1 - d) * (x - d))) {x >= d}
+      y = -(a * (S * |x + d|)^C) {x < -d}
       or
-      y = a(sign(x) * b + (1 - b) * (c * x^3 + (1 - c) * (1 / 1 - d) * (x + d))) {x <= -d}
+      y = (a * (S * |x + d|)^C) {x > d}
+
       Where
       x = input
       y = output
       a = ySaturation
-      b = yIntercept
       c = curvature
       d = deadzone
-      and 0 <= a,b,c,d < 1
+      and 0 <= a,d < 1
+      and 0 <= c < 10 (Higher than 10 is not recommended, as it will cause the curve to be too steep)
       */
+
+      // Apply Deadzone
       if (Math.abs(input) < deadzone) {
         return 0;
       }
+
+      // Calculate Curve
       return (inverted ? -1 : 1)
-          * ySaturation
-          * (Math.signum(input) * yIntercept
-              + (1 - yIntercept) * (curvature * Math.pow(input, 3) + (1 - curvature) * (1 / (1 - deadzone)) * (input - (deadzone*(input > 0 ? 1 : -1)))));
+          * (input < 0 ? -1 : 1)
+          * Math.pow(
+              (ySaturation
+                  * (1 / (1 - deadzone) * Math.abs(input + (input < 0 ? deadzone : -deadzone)))),
+              1 + curvature);
     }
   }
 }
