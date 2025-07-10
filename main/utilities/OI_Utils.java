@@ -64,7 +64,7 @@ public class OI_Utils {
     }
 
     public Control(XboxController.Axis axis, String action, XboxController controller) {
-      this(axis, action, controller, new ControlCurve(1, 0, 0, 0));
+      this(axis, action, controller, new ControlCurve(1, 0, 0));
     }
 
     public Control(XboxController.Button button, String action, XboxController controller) {
@@ -119,7 +119,7 @@ public class OI_Utils {
       this.inverted = inverted;
     }
 
-    public ControlCurve(double ySaturation, double yIntercept, double curvature, double deadzone) {
+    public ControlCurve(double ySaturation, double curvature, double deadzone) {
       this(ySaturation, curvature, deadzone, false);
     }
 
