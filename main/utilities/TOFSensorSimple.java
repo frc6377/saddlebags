@@ -63,7 +63,7 @@ public class TOFSensorSimple {
     if (TOF_Type == TOFType.LASER_CAN) {
       Measurement TOFMeasurement = LazerCan.getMeasurement();
       if (TOFMeasurement == null) {
-        System.out.println("Lazer Can " + id + " Has no measurement!!!!");
+        System.out.println("Laser Can " + id + " Has no measurement!!!!");
         return Millimeters.of(0);
       }
       return Millimeters.of(TOFMeasurement.distance_mm);
