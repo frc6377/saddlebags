@@ -104,6 +104,27 @@ public class OI_Utils {
     private ControlType getType() {
       return type;
     }
+
+    public Supplier<Double> getAxisSupplier() {
+      if (type != Control.ControlType.AXIS) {
+        DriverStation.reportError(action + " is not an axis", true);
+        return () -> 0d;
+      }
+      return () -> curve.calculate(controller.getRawAxis(id));
+    }
+
+    public Trigger getButton() {
+      switch (type) {
+        case BUTTON:
+          return new JoystickButton(controller, id);
+        case POVBUTTON:
+          return new POVButton(controller, id);
+        case TRIGGER:
+          return new Trigger(() -> controller.getRawAxis(id) > threshold);
+        default:
+          throw new RuntimeException(this.getAction() + " is not a valid button!");
+      }
+    }
   }
 
   public static class ControlCurve {
@@ -139,7 +160,7 @@ public class OI_Utils {
       c = curvature
       d = deadzone
       and 0 <= a,d < 1
-      and 0 <= c < 10 (Higher than 10 is not recommended, as it will cause the curve to be too steep)
+      and 0 <= c < 10 (Higher than 10 is usually not needed, but won't break the equation)
       */
 
       // Apply Deadzone
